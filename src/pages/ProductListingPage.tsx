@@ -1,7 +1,9 @@
+// Importe os módulos necessários
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import * as api from '../services/api';
 
+// Defina as interfaces para Category e Product
 interface Category {
   id: string;
   name: string;
@@ -15,11 +17,13 @@ interface Product {
 }
 
 function ProductListingPage() {
+  // Defina os estados para categorias, termo de busca, produtos buscados e erro de busca
   const [categories, setCategories] = useState<Category[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchedProducts, setSearchedProducts] = useState<Product[]>([]);
   const [searchError, setSearchError] = useState(false);
 
+  // UseEffect para carregar as categorias ao montar o componente
   useEffect(() => {
     async function loadCategories() {
       try {
@@ -33,6 +37,19 @@ function ProductListingPage() {
     loadCategories();
   }, []);
 
+  // Função para lidar com a busca de produtos por categoria
+  const handleCategoryClick = async (categoryId: string) => {
+    try {
+      const productsData = await api.getProductsFromCategoryAndQuery(categoryId, '');
+      setSearchedProducts(productsData.results);
+      setSearchError(false); // Reset search error flag
+    } catch (error) {
+      console.error('Error searching products:', error);
+      setSearchError(true); // Set search error flag
+    }
+  };
+
+  // Função para lidar com a busca de produtos por termo
   const handleSearch = async () => {
     try {
       const productsData = await api.searchProducts(searchTerm);
@@ -47,6 +64,7 @@ function ProductListingPage() {
   return (
     <div className="product-listing">
       <h1>Lista de Produtos</h1>
+      {/* Input para buscar produtos por termo */}
       <input
         type="text"
         placeholder="Buscar produtos..."
@@ -54,21 +72,28 @@ function ProductListingPage() {
         onChange={ (e) => setSearchTerm(e.target.value) }
         data-testid="query-input"
       />
+      {/* Botão para iniciar a busca */}
       <button onClick={ handleSearch } data-testid="query-button">
         Buscar
       </button>
+      {/* Lista de categorias */}
       <div className="categories">
         <h2>Categorias</h2>
         <ul>
           {categories.map((category) => (
             <li key={ category.id }>
-              <Link to={ `/category/${category.id}` } data-testid="category">
+              {/* Ao clicar em uma categoria, chama a função handleCategoryClick com o ID da categoria */}
+              <button
+                onClick={ () => handleCategoryClick(category.id) }
+                data-testid="category"
+              >
                 {category.name}
-              </Link>
+              </button>
             </li>
           ))}
         </ul>
       </div>
+      {/* Lista de produtos */}
       <div className="product-list">
         {searchedProducts.length === 0 && !searchError ? (
           <p data-testid="home-initial-message">
@@ -89,6 +114,7 @@ function ProductListingPage() {
           ))
         )}
       </div>
+      {/* Link para o carrinho de compras */}
       <Link to="/cart" data-testid="shopping-cart-button">
         Carrinho de Compras
       </Link>
