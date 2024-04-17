@@ -2,6 +2,7 @@ import './App.css';
 import { Route, Routes } from 'react-router-dom';
 import ProductListingPage from './pages/ProductListingPage';
 import ShoppingCartPage from './pages/ShoppingCartPage';
+import ProductDetailPage from './pages/ProductDetailPage';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
           <Route path="/cart" element={ <ShoppingCartPage /> } />
           {' '}
           {}
+          <Route path="/product/:productId" element={ <ProductDetailPage /> } />
         </Routes>
       </header>
     </div>
