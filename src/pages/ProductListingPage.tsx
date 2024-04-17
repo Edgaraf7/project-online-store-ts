@@ -7,8 +7,19 @@ interface Category {
   name: string;
 }
 
+interface Product {
+  id: string;
+  title: string;
+  price: number;
+  thumbnail: string;
+}
+
 function ProductListingPage() {
   const [categories, setCategories] = useState<Category[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchedProducts, setSearchedProducts] = useState<Product[]>([]);
+  const [searchError, setSearchError] = useState(false);
+
   useEffect(() => {
     async function loadCategories() {
       try {
@@ -22,17 +33,35 @@ function ProductListingPage() {
     loadCategories();
   }, []);
 
+  const handleSearch = async () => {
+    try {
+      const productsData = await api.searchProducts(searchTerm);
+      setSearchedProducts(productsData.results);
+      setSearchError(false); // Reset search error flag
+    } catch (error) {
+      console.error('Error searching products:', error);
+      setSearchError(true); // Set search error flag
+    }
+  };
+
   return (
     <div className="product-listing">
       <h1>Lista de Produtos</h1>
-      <input type="text" placeholder="Buscar produtos..." />
-      {/* Renderize a lista de categorias */}
+      <input
+        type="text"
+        placeholder="Buscar produtos..."
+        value={ searchTerm }
+        onChange={ (e) => setSearchTerm(e.target.value) }
+        data-testid="query-input"
+      />
+      <button onClick={ handleSearch } data-testid="query-button">
+        Buscar
+      </button>
       <div className="categories">
         <h2>Categorias</h2>
         <ul>
           {categories.map((category) => (
             <li key={ category.id }>
-              {/* Utilize um Link para a rota de filtro por categoria */}
               <Link to={ `/category/${category.id}` } data-testid="category">
                 {category.name}
               </Link>
@@ -41,11 +70,28 @@ function ProductListingPage() {
         </ul>
       </div>
       <div className="product-list">
-        <p data-testid="home-initial-message">
-          Digite algum termo de pesquisa ou escolha uma categoria.
-        </p>
+        {searchedProducts.length === 0 && !searchError ? (
+          <p data-testid="home-initial-message">
+            {searchTerm
+              ? 'Nenhum produto foi encontrado.'
+              : 'Digite algum termo de pesquisa ou escolha uma categoria.'}
+          </p>
+        ) : (
+          searchedProducts.map((product) => (
+            <div key={ product.id } data-testid="product">
+              <img src={ product.thumbnail } alt={ product.title } />
+              <p>{product.title}</p>
+              <p>
+                R$
+                {product.price}
+              </p>
+            </div>
+          ))
+        )}
       </div>
-      <Link to="/cart" data-testid="shopping-cart-button">Carrinho de Compras</Link>
+      <Link to="/cart" data-testid="shopping-cart-button">
+        Carrinho de Compras
+      </Link>
     </div>
   );
 }
