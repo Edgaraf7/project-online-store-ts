@@ -1,6 +1,7 @@
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
 import ProductListingPage from './pages/ProductListingPage';
+import ShoppingCartPage from './pages/ShoppingCartPage';
 
 function App() {
   return (
@@ -8,6 +9,9 @@ function App() {
       <header className="App-header">
         <Routes>
           <Route path="/" element={ <ProductListingPage /> } />
+          <Route path="/cart" element={ <ShoppingCartPage /> } />
+          {' '}
+          {}
         </Routes>
       </header>
     </div>

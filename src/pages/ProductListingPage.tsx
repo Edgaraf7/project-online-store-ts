@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 function ProductListingPage() {
   return (
     <div className="product-listing">
@@ -8,6 +10,7 @@ function ProductListingPage() {
           Digite algum termo de pesquisa ou escolha uma categoria.
         </p>
       </div>
+      <Link to="/cart" data-testid="shopping-cart-button">Carrinho de Compras</Link>
     </div>
   );
 }
