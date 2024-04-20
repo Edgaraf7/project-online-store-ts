@@ -1,0 +1,14 @@
+.card {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
+
+.title {
+  font-size: 16px;
+  margin: 10px 0;
+}
+
+.price {
+  font-weight: 700;
+}

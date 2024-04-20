@@ -1,0 +1,19 @@
+.cartButton {
+  background: none;
+  border: none;
+  bottom: 100px;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  position: relative;
+  text-decoration: none;
+}
+
+.cartImage {
+  height: 24px;
+  width: 24px;
+}
+
+.cartCount {
+  font-size: 16px;
+}

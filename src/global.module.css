@@ -1,0 +1,10 @@
+body {
+  background-color: hwb(0 94% 6%);
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  margin: 0 auto;
+  padding: 20px;
+}

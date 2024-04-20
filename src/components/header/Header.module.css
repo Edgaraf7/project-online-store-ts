@@ -1,0 +1,15 @@
+.headerContainer {
+  align-items: center;
+  background-color: rgb(4, 245, 125);
+  display: flex;
+  height: 148px;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+}
+
+.imgContainer {
+  height: 69.63px;
+  position: relative;
+  width: 267.27px;
+}

@@ -1,51 +1,53 @@
-export async function getCategories() {
+const API_BASE = 'https://api.mercadolibre.com';
+
+export async function getCategories(): Promise<any> {
   try {
-    const response = await fetch('https://api.mercadolibre.com/sites/MLB/categories');
+    const response = await fetch(`${API_BASE}/sites/MLB/categories`);
     const data = await response.json();
     return data;
-  } catch (error) {
-    console.error('Error fetching categories:', error);
-    throw error;
+  } catch (error: any) {
+    throw new Error(`Failed to fetch categories: ${error.message}`);
   }
 }
 
-export async function getProductsFromCategoryAndQuery(categoryId: string, query: string) {
+export async function getProductsFromCategoryAndQuery(query: string, categoryId: string):
+Promise<any> {
   try {
-    let url = 'https://api.mercadolibre.com/sites/MLB/search?';
-    if (categoryId) {
-      url += `category=${categoryId}`;
-    }
-    if (query) {
-      url += `&q=${query}`;
-    }
-
-    const response = await fetch(url);
+    const response = await fetch(`${API_BASE}/
+    sites/MLB/search?category=${categoryId}&q=${query}`);
     const data = await response.json();
     return data;
-  } catch (error) {
-    console.error('Error fetching products:', error);
-    throw error;
+  } catch (error: any) {
+    throw new Error(`Failed to fetch products: ${error.message}`);
   }
 }
 
-export async function getProductById(productId: string) {
+export async function getProductsByCategoryFromId(categoryId: string): Promise<any> {
   try {
-    const response = await fetch(`https://api.mercadolibre.com/items/${productId}`);
+    const response = await fetch(`${API_BASE}/sites/MLB/search?category=${categoryId}`);
     const data = await response.json();
     return data;
-  } catch (error) {
-    console.error('Error fetching product details:', error);
-    throw error;
+  } catch (error: any) {
+    throw new Error(`Failed to fetch products: ${error.message}`);
   }
 }
 
-export async function searchProducts(query: string) {
+export async function getProductsFromQuery(query: string): Promise<any> {
   try {
-    const response = await fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${query}`);
+    const response = await fetch(`${API_BASE}/sites/MLB/search?q=${query}`);
     const data = await response.json();
     return data;
-  } catch (error) {
-    console.error('Error searching products:', error);
-    throw error;
+  } catch (error: any) {
+    throw new Error(`Failed to fetch products: ${error.message}`);
+  }
+}
+
+export async function getDetailsFromId(id: string): Promise<any> {
+  try {
+    const response = await fetch(`${API_BASE}/items/${id}`);
+    const data = await response.json();
+    return data;
+  } catch (error: any) {
+    throw new Error(`Failed to fetch products: ${error.message}`);
   }
 }
